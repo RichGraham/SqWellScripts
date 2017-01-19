@@ -1,3 +1,12 @@
+#Check correct number of command line arguments
+if (( $# < 1 )); then
+    echo "Averages over the output of multiple runs, to improve accuracy." >&2
+   echo "Usage  :  batchAverage_sqW.sh [.list file (omit .list extension) see batchOutput.sh)]" >&2
+   echo "Example:  batchAverage_sqW.sh N5Test" >&2
+  exit 1
+fi
+
+
 for var in "$@"
 do
     echo "$var"

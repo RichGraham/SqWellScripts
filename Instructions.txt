@@ -18,8 +18,8 @@
 
 * batchOutput: Compares the output of multiple runs, to check reproducibility.
 	-doBoth.sh
-
-* batchAverage
+* batchAverage: Averages over the output of multiple runs, to improve accuracy.
+	-doBoth.sh
 
 * multiAverage        
 
