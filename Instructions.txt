@@ -1,10 +1,25 @@
 ====Setting up simulations====
-- sqWellCp.sh: Creates a copy of an input file with a new name and new output folders
-
+* sqWellCp.sh: Creates a copy of an input file with a new name and new output folders
+* quickRestart
+* checkOutputFolder.sh
+* clipQuad 
 
 ==== Analysing results ====
 
-- doBoth.sh: Averages and presents sqWell output data
+* doBoth.sh: Averages and presents sqWell output data
+	-collateClip
+	-showAll.sh
+	-blockVary
+
+* batchOutput
+* batchAverage
+
+* multiAverage        
+
+* dosMapping
+
+
+                                                            
 
 ====Building====
 cd  ~/source/SqWellScripts
