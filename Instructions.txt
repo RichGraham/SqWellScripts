@@ -1,7 +1,19 @@
+====Setting up simulations====
+
 ==== Analysing results ====
 
+____doBoth.sh____
+Presents sqWell output data
+Runs the following: 
+ - CollateClip: averages over block data, clipping out early results if desired.
+ - blockVary: computes the upper and low range explored during a block
+Plots results via xmgrace
+Usage  :  doBoth [int matchPoint][int Maximum energy][input filename][int averaging start point]
+Example:  doBoth.sh 0 100 inputFiles/N10TestRun.dat 1
+
+during a block
 
 
-CollateClip: averages over block data, clipping out early results if desired.
-blockVary: computes the upper and low range explored during a block
+====Building====
 
+Run >./makeAll.sh icc <--compiler name (optional) defaults to gcc
