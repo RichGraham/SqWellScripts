@@ -1,0 +1,7 @@
+==== Analysing results ====
+
+
+
+CollateClip: averages over block data, clipping out early results if desired.
+blockVary: computes the upper and low range explored during a block
+
