@@ -16,7 +16,9 @@
 	-showAll.sh
 	-blockVary
 
-* batchOutput
+* batchOutput: Compares the output of multiple runs, to check reproducibility.
+	-doBoth.sh
+
 * batchAverage
 
 * multiAverage        
