@@ -10,6 +10,7 @@ if (( $# < 1 )); then
     echo "N10Test2 0" >&2
     echo "N10Test3 0" >&2
     echo "" >&2
+    echo "!!!! .list files should have a final carriage return at end!!!!" >&2
    echo "Usage  :  batchOutput.sh [.list file (as above)]" >&2
    echo "Example:  batchOutput.sh N5Test.list " >&2
   exit 1
