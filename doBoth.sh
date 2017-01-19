@@ -7,7 +7,7 @@ if (( $# < 4 )); then
     echo " -CollateClip: averages over block data, clipping out early results if desired." >&2
     echo " - blockVary: computes the upper and low range explored during a block">&2
     echo "Plots results via xmgrace"
-    echo "" > &2
+    echo " ">&2
    echo "Usage  :  doBoth [int matchPoint][int Maximum energy][input filename][int averaging start point]" >&2
    echo "Example:  doBoth.sh 0 100 inputFiles/N10TestRun.dat 1" >&2
   exit 1
