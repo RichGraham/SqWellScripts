@@ -1,7 +1,12 @@
 ====Setting up simulations====
 * sqWellCp.sh: Creates a copy of an input file with a new name and new output folders
+
+* setupRun.sh (main distro): Generates output folders and hpc submission scripts  
+   	- checkOutputFolder.sh: Checks input file and output folder names are the same
+	- createDirs.sh (main distro): Creates required output folders 
+
 * quickRestart
-* checkOutputFolder.sh
+
 * clipQuad 
 
 ==== Analysing results ====
