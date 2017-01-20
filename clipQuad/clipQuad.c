@@ -26,7 +26,11 @@ int main(int argc, char *argv[] )
 
   //====Check correct number of args and that input file exisits================
   if(argc != 6){
-    printf("Usage: clipQuad [weight filename][int lower limit ][int higher limit][int quadratic minimum][float edge biasing value]\n");
+    printf("Attempts to create a biasing function that's localised around the density of states'bottle-neck'\n");
+    printf("Takes an estimate of the free energy landscape and subtracts a quadratic with centre and strength specified below\n");
+    printf("Also flattens the biasing function at upper and lower limit to avoid exploring extreme edges.\n");
+    printf("Usage: clipQuad [weight filename][int lower limit ][int upper limit][int quadratic minimum][float edge biasing value]\n");
+    printf("Example: clipQuad N40Test.list.dat 0 110 75 2\n");
     exit(EXIT_FAILURE);
   }
 
