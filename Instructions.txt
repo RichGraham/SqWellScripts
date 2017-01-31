@@ -23,7 +23,8 @@
 
 * multiAverage        
 
-* dosMapping
+* dosMapping: takes an existing free energy landscape and maps it to a new temperature via density of states.
+	Also computes 1/T vs E (via DOS)
 
 
                                                             
