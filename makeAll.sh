@@ -6,7 +6,7 @@ cp sqWellCp.sh ~/bin/
 cp batchOutput/batchOutput.sh ~/bin/
 cp checkOutputFolder.sh ~/bin
 cp quickRestart/quickRestart.sh ~/bin
-cp batchAverage/batchAverage_sqW.sh ~/bin
+ln -sf ~/source/SqWellScripts/batchAverage/batchAverage_sqW.sh ~/bin
 
 
 #Check correct numnber of command line arguments

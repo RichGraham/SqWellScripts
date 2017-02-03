@@ -3,6 +3,9 @@
 #include <math.h>
 #include <string.h>
 
+#define OCC_TOL 0.0003
+//#define OCC_TOL 0.0000
+
 int main(int argc, char *argv[] )
 {
 
@@ -51,6 +54,8 @@ int main(int argc, char *argv[] )
   int fileNumber;
   int NBeads;
 
+  int stitchPoint[18]={0};
+
   
   char sdir[400];
   char wdir[400];
@@ -60,6 +65,11 @@ int main(int argc, char *argv[] )
 
   char inputFileName[400];
 
+  double tempLevel[18]={0.0};
+
+  int findMatchPoint( int temp, long unsigned occupancies[18][1000], int nTemps);
+
+  
   
   //====Original variables
   char sdirTEMP[400], ddirTEMP[400], weightFileTEMP[400], weightFile[400], newWeightFileTEMP[400];
@@ -69,7 +79,8 @@ int main(int argc, char *argv[] )
   int startPoint;
 
   long unsigned int occupanciesTEMP[18][1000]={0};
-    long unsigned int occupancies[18][1000]={0};
+  long unsigned int occupancies[18][1000]={0};
+  double lnDOS[18][1000]={0.0};
 
     FILE  *weightPtr;
     char blockFile[400];
@@ -93,6 +104,7 @@ int main(int argc, char *argv[] )
   if(FLAG==1){
     printf("Averages over n runs of the sqWell code. All runs must have the same weight file or will be refused.\n");
     printf("Usage: multiAverage  [int matchPoint][int NMax][input filename 1][int startPoint 1]...[input filename n][int startPoint n][output file name]\n");
+    printf("This code outputs the following files:\n * <NAME>.list.dat : The FE barrier at Tinterest (from Tinterest)\n * <NAME>.list.dat.all : [N columns] The FE barrier at Tinterest (from each temperature)\n * <NAME>.list.dat.FE.stc :  The FE barrier at Tinterest (stitched together using the best available temperature)\n * <NAME>.list.dat.invT.all : [N columns] 1/T vs n_E (from each temperature)\n * <NAME>.list.dat.invT.stc : 1/T vs n_E (stitched together using the best available temperature)\n");
     exit(EXIT_FAILURE);
   }
 
@@ -109,7 +121,7 @@ int main(int argc, char *argv[] )
     printf("%s %s\n",argv[fileNumber*2-1], argv[fileNumber*2] );
 
     sprintf( inputFileName,"inputFiles/%s.dat", argv[fileNumber*2-1]);
-
+    
     
     
     if((inputPtr = fopen(inputFileName,"r")) == NULL){
@@ -117,10 +129,7 @@ int main(int argc, char *argv[] )
       exit(EXIT_FAILURE);
     }
     
- 
-
-
-    
+        
     //====Read in the input file====================================
     printf("Reading from the input file: %s\n", argv[fileNumber*2-1]);
     fscanf(inputPtr, "%d\n", &NBeads);
@@ -214,29 +223,16 @@ int main(int argc, char *argv[] )
 	exit( EXIT_FAILURE);
       }
     }
-
-
-
     printf("%d %s %s\n", fileNumber*2-1, masterWeightFile, weightFile);
-
-  
 
     //convert command line arguments to integers
     num_blocks= 1000000000;
     startPoint= atoi( argv[fileNumber*2]);
-    
     printf("Start point=%d\n",startPoint);
-    
-    
     sprintf(sdirTEMP,"%s" ,outputDir);
     
     
-
-
-
-
     //====================Trim down the new weight file folder path====================
-
     sprintf(newWeightFileTEMP,"%s",argv[fileNumber*2 - 1]);
     for(i = 1  ;   i <= 11   ;   i++)
       memmove(newWeightFileTEMP, newWeightFileTEMP+1, strlen(newWeightFileTEMP));
@@ -253,22 +249,19 @@ int main(int argc, char *argv[] )
     //sprintf(newWeightFile,"outputFiles/weightFiles/%s",newWeightFileTEMP);
     sprintf(newWeightFile,"dummy.dat");
     
-
     printf("Source directory: %s\n", sdir);
     printf("Working directory: %s\n", wdir);
     printf("Number of blocks: %d\n", num_blocks);
     printf("Max no. of states: %d\n",N);
     printf("Weight File for correction: %s\n",weightFile);
+    printf("Temperatures file: %s\n", tempsFile);
     printf("New weight file: %s\n",newWeightFile);
     printf("Number of Temps = %d\n",numTemps);
 
 
-    
-
-
     //printf("Nmax=%d\n",N);
 
-    //====Read in blocks from startPoint===========
+    //====Read in blocks from startPoint (read all temperatures!)===========
     for(n=startPoint;n<num_blocks;n++){
       sprintf(blockFile,"%soccupancies/block_%d.dat",sdir,n+1);
       if((inputPtr=fopen(blockFile,"r"))==NULL){
@@ -277,9 +270,7 @@ int main(int argc, char *argv[] )
 	//exit(EXIT_FAILURE);
 	break;
       }
-      else
-	if (!(n % 100)) 
-	  printf("Reading from file: %s\n", blockFile);
+      else if (!(n % 100))  printf("Reading from file: %s\n", blockFile);
       i=0;
       for(i=0;i<N;i++){
 	for(j=0;j<numTemps;j++)
@@ -288,9 +279,8 @@ int main(int argc, char *argv[] )
       fclose(inputPtr);
       //printf("Read in: %ld\n",occupanciesTEMP[3][200]);
          
-  
       
-      //==Compute the total occupancy (unnormalised average)===
+      //==Compute the total occupancy (unnormalised average) for all temperatures===
       for(i=0;i<N;i++){
 	for(j=0;j<numTemps;j++)
 	  occupancies[j][i]+=occupanciesTEMP[j][i];
@@ -304,23 +294,20 @@ int main(int argc, char *argv[] )
   }//loop over input files
   
 
-
+  //**************************Occupancy data has now been read for all temperatures*******************
+  //                          Now output the data averaged over all input files
   
 
   long unsigned int totalSteps=0;
   double relOccupancies[18][1000];
   double FE[18][1000];
   double basePoint;
+  int  dummyInt;
 
   for(i=0;i<N;i++)
     totalSteps += occupancies[0][i];
 
   printf("total steps=%ld; weightfile=%s\n",totalSteps, weightFile);
-
-
-  
-  int  dummyInt;
-
   //printf("Nmax=%d\n",N);
 
 
@@ -337,18 +324,30 @@ int main(int argc, char *argv[] )
   }
   fclose(weightPtr);
   printf("Weight file read\n");
+
+
+  //=====Read in temperatures file===============
+  if((weightPtr=fopen(tempsFile,"r"))==NULL)
+    printf("Cannot open temps file: %s\n",tempsFile);
+  else{
+    for(i=0;i<numTemps;i++)   fscanf(weightPtr,"%lf",&tempLevel[i]);
+    //printf("%d %f\n",i, tempLevel[i]);}
+  }
+  fclose(weightPtr);
+  printf("Temps file read\n");
+  
   //printf("Nmax=%d\n",N);
 
 
 
 
-  //===Compute the unshifted free energy========
+  //===Compute the unshifted free energy (for all temperatures!!)========
   for(i=0;i<N;i++){
     //printf("Loop in!\n");
     for(j=0;  j<numTemps ;   j++){
       relOccupancies[j][i] = 1.0*occupancies[j][i]/(1.0*totalSteps);      
-      if(relOccupancies[j][i]>0.0)
-	FE[j][i] = -log(relOccupancies[j][i]/(exp(bias[i])));
+      if(occupancies[j][i]>0)
+	FE[j][i] = -log(relOccupancies[j][i]/(exp(tempLevel[TEMP_INTEREST]/tempLevel[j]*bias[i])));
 	//FE[j][i] = -log(relOccupancies[j][i]);
       else
 	FE[j][i] = FE[j][i-1];
@@ -357,48 +356,160 @@ int main(int argc, char *argv[] )
   }
 
 
-  //===Find the FE at the match point and subtract=======
-  for(j=0; j<=numTemps; j++){
-    basePoint = FE[j][matchPoint];
+  //====Compute lnDOS for all temperatures====
+  for(i=0;i<N;i++){
+    for(j=0;j<numTemps;j++){
+      if(  relOccupancies[j][i] > OCC_TOL || j==TEMP_INTEREST || j==0 || j==numTemps-1)
+	lnDOS[j][i] = -FE[j][i] - 1.0*i/tempLevel[j];
+      else
+	lnDOS[j][i]=0.0;//-i/tempLevel[TEMP_INTEREST];
+    }//loop over temperatures
+  }//loop over energy states
+
+
+  for(i=0;i<N;i++){
+    for(j=0;  j<numTemps ;   j++){
+      FE[j][i] = -lnDOS[j][i]-i/tempLevel[TEMP_INTEREST];
+    }
+  }
+
+
+  //==== Find the best point to match the neighbouring landscapes
+  for(i = 0  ;   i <= numTemps-1    ;   i++){
+    stitchPoint[i] = findMatchPoint( i, occupancies, N);
+    printf("%d %d\n",i,stitchPoint[i]);
+  }
+
+  
+  //===Find the FE at the STITCH point and subtract (for all temperatures)=======
+  for(j=1; j<=numTemps; j++){
+    basePoint = -FE[j-1][stitchPoint[j]] + FE[j][stitchPoint[j]];
     printf("matchPoint=%d baseFE=%f N=%d\n",matchPoint, basePoint, N );
     for(i=0;i<N;i++)
       FE[j][i] -= basePoint;
   }
   
 
-  //printf("Num %d\n",numTemps);
-  //printf("Number of Temps = %d\n",numTemps);
+  
+  //===Find the FE at the MATCH point and subtract (for all temperatures)=======
+  basePoint = FE[TEMP_INTEREST][matchPoint];
+  for(j=0; j<=numTemps; j++){
+    //printf("matchPoint=%d baseFE=%f N=%d\n",matchPoint, basePoint, N );
+    for(i=0;i<N;i++)
+      FE[j][i] -= basePoint;
+  }
+  
   
   FILE *occOutputPtr, *FEoutputPtr, *biasOutputPtr;
   char occOutputFile[400], FEoutputFile[400];
-  for(j=0;j<numTemps;j++){
 
-    
-    /*
-    sprintf(occOutputFile,"%soccW_chain%d.dat",ddir,j);
-    sprintf(FEoutputFile,"%sFE_chain%d.dat",ddir,j);
-    occOutputPtr = fopen(occOutputFile,"w");
-    FEoutputPtr = fopen(FEoutputFile, "w");
-    */
+  
+  //========Write invT for all temps individually========
+  sprintf(FEoutputFile,"%s.invT.all",argv[argc-1]);
+  FEoutputPtr = fopen(FEoutputFile,"w");
+  for(i=1;i<N-1;i++){
+    fprintf(FEoutputPtr,"%d ",i);
+    for(j=0;j<numTemps;j++){
+      if(  relOccupancies[j][i+1] > OCC_TOL && relOccupancies[j][i-1] > OCC_TOL){
+	fprintf(FEoutputPtr,"%f ",  -(lnDOS[j][i+1]-lnDOS[j][i-1])/2.0);    
+      }else{
+	if( j==0 && i > stitchPoint[1]){
+	  fprintf(FEoutputPtr,"%f ",  -(lnDOS[j][i+1]-lnDOS[j][i-1])/2.0);    
+	}else{
+	  if( j==numTemps-1  && i< stitchPoint[numTemps] ){
+	    fprintf(FEoutputPtr,"%f ",  -(lnDOS[j][i+1]-lnDOS[j][i-1])/2.0);    
+	  }else{
+	    fprintf(FEoutputPtr,"%f ",-100.0);
+	  }
+	}
+      }
+    }//loop over temperatures 
+    fprintf(FEoutputPtr,"\n");
+  }//loop over energy states
+  fclose(FEoutputPtr);    
 
-    if( j== TEMP_INTEREST){
-      biasOutputPtr = fopen(argv[argc-1],"w");
-      for(i=0;i<N;i++)
-	fprintf(biasOutputPtr,"%d %f\n",i, FE[j][i]);
-      fclose(biasOutputPtr);
+
+  //========Write stiched invT file========
+  sprintf(FEoutputFile,"%s.invT.stc",argv[argc-1]);
+  FEoutputPtr = fopen(FEoutputFile,"w");
+  j=numTemps; // needs to go backwards!!!
+  for(i=1;i<N-1;i++){
+    if( j !=0 && i> stitchPoint[j]   ) j--;
+
+    //printf("j=%d i=%d nextStitch=%d occs=%ld,%ld %f %f\n",j,i,stitchPoint[j],occupancies[j][i+1] , occupancies[j][i-1],lnDOS[j][i+1],lnDOS[j][i-1]  );
+    if(  occupancies[j][i+1] > 10 && occupancies[j][i-1] > 10 ){
+      //printf("^ Added!\n");
+      fprintf(FEoutputPtr,"%d %f\n",i,-(lnDOS[j][i+1]-lnDOS[j][i-1])/2.0);
     }
+  }//loop over energy states
+  fclose(FEoutputPtr);    
 
-    /*
-    for(i=0;i<N;i++){
-      fprintf(occOutputPtr,"%d %f\n", i, relOccupancies[j][i]);
-      fprintf(FEoutputPtr,"%d %f\n", i, FE[j][i]);
+
+  //========Write stiched FE file========
+  sprintf(FEoutputFile,"%s.FE.stc",argv[argc-1]);
+  FEoutputPtr = fopen(FEoutputFile,"w");
+  j=numTemps; // needs to go backwards!!!
+  for(i=1;i<N-1;i++){
+    if( j !=0 && i> stitchPoint[j]   ) j--;
+
+    //printf("j=%d i=%d nextStitch=%d occs=%ld,%ld %f %f\n",j,i,stitchPoint[j],occupancies[j][i+1] , occupancies[j][i-1],lnDOS[j][i+1],lnDOS[j][i-1]  );
+    if(  occupancies[j][i+1] > 10 && occupancies[j][i-1] > 10 ){
+      //printf("^ Added!\n");
+      fprintf(FEoutputPtr,"%d %f\n",i,FE[j][i]);
     }
-    fclose(occOutputPtr);
-    fclose(FEoutputPtr);
-    */
-  }
+  }//loop over energy states
+  fclose(FEoutputPtr);    
+  
+  
+  //========write the FE data for all temperatures========
+  sprintf(FEoutputFile,"%s.all",argv[argc-1]);
+  FEoutputPtr = fopen(FEoutputFile,"w");
 
+  //====Put the temperature on interest in it's own file as well
+  biasOutputPtr = fopen(argv[argc-1],"w");
+  for(i=0;i<N;i++){
+    fprintf(FEoutputPtr,"%d ",i);
+    for(j=0;j<numTemps;j++){
+      if(  relOccupancies[j][i] > OCC_TOL){
+	fprintf(FEoutputPtr,"%f ",FE[j][i]);
+      }else{
+	if( j==0 && i > stitchPoint[1] ){
+	  fprintf(FEoutputPtr,"%f ",FE[j][i]);
+	}else{
+	  if( j==numTemps-1 && i< stitchPoint[numTemps]){
+	    fprintf(FEoutputPtr,"%f ",FE[j][i]);
+	  }else{
+	    fprintf(FEoutputPtr,"%f ",-100.0);
+	  }
+	}
+      }
+      if( j== TEMP_INTEREST)   fprintf(biasOutputPtr,"%d %f\n",i, FE[j][i]);
+    }//loop over temperatures
+    fprintf(FEoutputPtr,"\n");
+  }//loop over energy states
+  fclose(biasOutputPtr);
+  fclose(FEoutputPtr);
+
+
+  
   printf("Finished!\n");
 
   return 0;
+}
+
+int findMatchPoint( int temp, long unsigned int occupancies[18][1000], int nPoints)
+{
+  int currentMatch=0;
+  long int currentMaxiMin=0;
+  int i;
+  long int test;
+
+  for(i = 0  ;   i <= nPoints   ;   i++){
+    test=fmin(occupancies[temp][i], occupancies[temp-1][i]);
+    if (test > currentMaxiMin){
+      currentMaxiMin = test;
+      currentMatch = i;
+    }
+  } 
+    return currentMatch;
 }

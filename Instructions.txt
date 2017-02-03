@@ -18,16 +18,21 @@
 
 * batchOutput: Compares the output of multiple runs, to check reproducibility.
 	-doBoth.sh
-* batchAverage: Averages over the output of multiple runs, to improve accuracy.
-	-doBoth.sh
 
-* multiAverage        
+* batchAverage: Averages over the output of multiple runs [uses the same .list files as batchOutput].
+	-doBoth.sh
+	-multiAverage: 
+This code outputs the following files:
+	§ <NAME>.list.dat : The FE barrier at Tinterest (from Tinterest)
+	§ <NAME>.list.dat.all : [N columns] The FE barrier at Tinterest (from each temperature)
+	§ <NAME>.list.dat.FE.stc :  The FE barrier at Tinterest (stitched together using the best available temperature)
+	§ <NAME>.list.dat.invT.all : [N columns] 1/T vs n_E (from each temperature)
+	§ <NAME>.list.dat.invT.stc : 1/T vs n_E (stitched together using the best available temperature)
+
 
 * dosMapping: takes an existing free energy landscape and maps it to a new temperature via density of states.
 	Also computes 1/T vs E (via DOS)
-
-
-                                                            
+                                        
 
 ====Building====
 cd  ~/source/SqWellScripts
