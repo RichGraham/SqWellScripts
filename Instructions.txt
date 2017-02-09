@@ -12,9 +12,9 @@
 ==== Analysing results ====
 
 * doBoth.sh: Averages and presents sqWell output data
-	-collateClip
-	-showAll.sh
-	-blockVary
+	-collateClip: averages over temperatures individually for a single run
+	-blockVary : examines each block and finds the mean n_SW and the max/min value that has at least 10 visits.
+	-showAll.sh : plots summary data for a run to allow checking and diagnosis of issues
 
 * batchOutput: Compares the output of multiple runs, to check reproducibility.
 	-doBoth.sh
