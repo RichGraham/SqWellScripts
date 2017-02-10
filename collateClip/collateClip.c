@@ -46,6 +46,8 @@ int main(int argc, char *argv[] )
     int update;
   double tolerance;
 
+  double tempLevel[18]={0.0};
+  
   
   //====Original variables
   char sdirTEMP[400], ddirTEMP[400], weightFileTEMP[400], weightFile[400], newWeightFileTEMP[400];
@@ -269,7 +271,18 @@ int main(int argc, char *argv[] )
   //printf("Weight file read\n");
   //printf("Nmax=%d\n",N);
 
-
+  //=====Read in temperatures file===============
+  if((weightPtr=fopen(tempsFile,"r"))==NULL)
+    printf("Cannot open temps file: %s\n",tempsFile);
+  else{
+    for(i=0;i<numTemps;i++)   fscanf(weightPtr,"%lf",&tempLevel[i]);
+    //printf("%d %f\n",i, tempLevel[i]);}
+  }
+  fclose(weightPtr);
+  printf("Temps file read\n");
+  
+  //printf("Nmax=%d\n",N);
+  
 
   //===Compute the unshifted free energy========
   for(i=0;i<N;i++){
@@ -277,7 +290,7 @@ int main(int argc, char *argv[] )
     for(j=0;  j<numTemps ;   j++){
       relOccupancies[j][i] = 1.0*occupancies[j][i]/(1.0*totalSteps);      
       if(relOccupancies[j][i]>0.0)
-	FE[j][i] = -log(relOccupancies[j][i]/(exp(bias[i])));
+	FE[j][i] = -log(relOccupancies[j][i]/(exp(tempLevel[TEMP_INTEREST]/tempLevel[j]*bias[i])));
 	//FE[j][i] = -log(relOccupancies[j][i]);
       else
 	FE[j][i] = FE[j][i-1];
