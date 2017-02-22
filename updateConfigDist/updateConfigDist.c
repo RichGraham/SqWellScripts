@@ -36,10 +36,10 @@ int main(int argc, char *argv[])
   FILE *inFilePtr;
   FILE *distInputPtr;
   int index, distTemp;
-  int distribution[300];
+  int distribution[300]={0};
 
   //____Check for distribution data and read in_____
-  if((distInputPtr=fopen("distribution.dat","r"))!=NULL){
+  if((distInputPtr=fopen("distribution.dist","r"))!=NULL){
     while(!feof(distInputPtr)){
       fscanf(distInputPtr,"%d %d", &index,&distTemp);
       if(!feof(distInputPtr))
@@ -53,13 +53,14 @@ int main(int argc, char *argv[])
 
   //_____Read in all the data_____
   for(i=1;i<=argc-1;i++){
-    if(!strcmp(argv[i],"distribution.dat")) continue;
+    if(!strcmp(argv[i],"distribution.dist")) continue;
     if(!strncmp(argv[i],"DONE",4)) continue;
     if((inFilePtr = fopen(argv[i],"r"))==NULL){
       fprintf(stderr,"Can't open file %s\n",argv[i]);
       exit(EXIT_FAILURE);
     }
-    fprintf(stderr,"File %d open %s\n",i,argv[i]);    
+    
+    if ( i % 100 == 0 ) fprintf(stderr,"File %d open %s\n",i,argv[i]);    
 
     //____Parse through the file____
     j=0;
@@ -80,12 +81,12 @@ int main(int argc, char *argv[])
     
     //___Update filename
     char newFilename[100];
-    sprintf(newFilename,"DONE%s",argv[i]);
+    sprintf(newFilename,"DONE%s_x",argv[i]);
     rename(argv[i],newFilename);
 
     //___Output new distribution____
     FILE *distOutputPtr;
-    distOutputPtr=fopen("distribution.dat","w");
+    distOutputPtr=fopen("distribution.dist","w");
     for(j=0;j<=N;j++){
       if(distribution[j]>0)
 	fprintf(distOutputPtr,"%d %d\n",j,distribution[j]);
