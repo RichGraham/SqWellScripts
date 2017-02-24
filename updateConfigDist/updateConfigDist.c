@@ -84,6 +84,9 @@ int main(int argc, char *argv[])
     sprintf(newFilename,"DONE%s_x",argv[i]);
     rename(argv[i],newFilename);
 
+    //____Choose to DELETE!!!____
+    //remove(newFilename);
+
     //___Output new distribution____
     FILE *distOutputPtr;
     distOutputPtr=fopen("distribution.dist","w");
@@ -92,6 +95,19 @@ int main(int argc, char *argv[])
 	fprintf(distOutputPtr,"%d %d\n",j,distribution[j]);
     }
     fclose(distOutputPtr);
+
+
+    //___Output the normalised distribution____
+    long int total_states=0;
+    for(j=0;j<=N;j++) total_states += distribution[j];
+    distOutputPtr=fopen("normalised.dist","w");
+    for(j=0;j<=N;j++){
+      if(distribution[j]>0)
+	fprintf(distOutputPtr,"%d %f\n",j,distribution[j]/(1.0*total_states));
+    }
+    fclose(distOutputPtr);
+    
+    
   }
 
   return 0;
