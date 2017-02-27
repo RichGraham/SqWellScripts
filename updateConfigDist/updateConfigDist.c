@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     rename(argv[i],newFilename);
 
     //____Choose to DELETE!!!____
-    //remove(newFilename);
+    remove(newFilename);
 
     //___Output new distribution____
     FILE *distOutputPtr;
