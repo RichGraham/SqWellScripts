@@ -9,6 +9,7 @@ cp quickRestart/quickRestart.sh ~/bin
 ln -sf ~/source/SqWellScripts/batchAverage/batchAverage_sqW.sh ~/bin
 ln -sf ~/source/SqWellScripts/updateConfigDist/resetNames_sqW.sh ~/bin
 ln -sf ~/source/SqWellScripts/updateConfigDist/confUpEn_sqW.sh ~/bin
+ln -sf ~/source/SqWellScripts/updateConfigDist/allConfigDist_sqW.sh ~/bin
 
 #Check correct numnber of command line arguments
 if (( $# > 1 )); then
