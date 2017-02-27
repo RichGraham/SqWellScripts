@@ -19,7 +19,7 @@ LowestE=$4
 HighestE=$5
 
 
-for i in $(seq $LowestTemp $HighestTemp)
+for i in $(seq $LowestE $HighestE)
 do
     echo Energy level: $i
     confUpEn_sqW.sh $BaseFolder $i $LowestTemp $HighestTemp
