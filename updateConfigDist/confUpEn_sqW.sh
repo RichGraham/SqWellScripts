@@ -2,7 +2,7 @@
 
 #Check correct number of command line arguments
 if (( $# < 4 )); then
-    echo "Computes P(nc|E) for a specific E for temps LowestTemp....HighestTemp and plots dists" >&2
+    echo "Computes P(nc|E) for a specific E for temps LowestTemp....HighestTemp" >&2
     echo "Runs the following: " >&2
     echo " - updateConfigDist_sqW: takes all config files in a folder and updates the current distribution" >&2
     echo " ">&2

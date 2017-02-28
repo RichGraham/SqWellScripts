@@ -32,7 +32,13 @@ This code outputs the following files:
 
 * dosMapping: takes an existing free energy landscape and maps it to a new temperature via density of states.
 	Also computes 1/T vs E (via DOS)
-                                        
+
+====Extracting data for new order parameters====
+
+* allConfigDist_sqW.sh :  Goes into each T and E config folder, computes nc from each config file and updates the histogram
+       - confUpEn_sqW.sh:  Computes P(nc|E) for a specific E for temps LowestTemp....HighestTemp                                     - updateConfigDist_sqW: C code to compute nc (Steihardt-Nelson) and delete config file
+
+* showConfigDist_sqW.sh : Plots P(nc|E) for a range of different tempering levels
 
 ====Building====
 cd  ~/source/SqWellScripts
