@@ -1,6 +1,6 @@
 # simple make file
 # September 2004
-SOURCES=aveNC.c 
+SOURCES=aveNc.c 
 PRODUCT=$(HOME)/bin/aveNC_sqW
 
 
