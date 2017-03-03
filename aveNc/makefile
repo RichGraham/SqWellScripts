@@ -6,7 +6,7 @@ PRODUCT=$(HOME)/bin/aveNC_sqW
 
 
 
-CFLAGS=-lm -O2 -I$(NR)/include
+CFLAGS=-lm -O2 
 
 
 
