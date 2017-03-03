@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     fprintf(dataFile,"%d ",nc);
     for(tempNum=0;   tempNum < nCol-1 ; tempNum++){
       if(TempNormConst[tempNum] != 0)
-	fprintf(dataFile,"%f ",SN_Hist[tempNum][nc]/(1.0*TempNormConst[tempNum]));
+	fprintf(dataFile,"%e ",SN_Hist[tempNum][nc]/(1.0*TempNormConst[tempNum]));
       else
 	fprintf(dataFile,"0.0 ");
     }
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
   dataFile = fopen(aveOutFileName, "w");
   for(nc=0; nc<=ncCount ; nc++){
     if(totalNorm != 0 && SN_OverTemps[nc] != 0 )
-      fprintf(dataFile,"%d %f\n",nc,SN_OverTemps[nc]/(1.0*totalNorm));
+      fprintf(dataFile,"%d %e\n",nc,SN_OverTemps[nc]/(1.0*totalNorm));
   }
   fclose(dataFile);
   return 0;

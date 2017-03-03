@@ -1,6 +1,6 @@
 #Check correct number of command line arguments
 if (( $# != 2 )); then
-    echo "Compares P(nc|E) average of multiple runs, to check reproducibility." >&2
+    echo "Compares P(nc|E) over of multiple runs with their average, to check reproducibility." >&2
     echo "Usage  :  batchConfigShow_sw.sh [.list file (as below)][Energy of Interest]" >&2
     echo "Example:  batchConfigShow_sw.sh  N5Test.list " >&2
     echo "" >&2
@@ -36,6 +36,15 @@ do
 
    cd ../../
 done
+cd ../
+
+for i in $(seq 1 $(expr ${#arr1[@]} - 1))
+do
+    :
+    allFolders="$allFolders outputFiles/${arr1[$i]}/configs/Hist_$EnergyVal.dat"
+done
+multiAveNc_sqW $allFolders dum.dat
+
 
 #echo $all
-xmgrace  -g 1200x900 $all &
+xmgrace  -pexec "s0 line linewidth 8" -g 1200x900 dum.dat $all &
