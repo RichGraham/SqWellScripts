@@ -1,11 +1,12 @@
 #!/bin/bash
 #Plots P(nc|E) for a range of different tempering levels
+
 #Check correct number of command line arguments
 if (( $# < 4 )); then
-    echo "" >&2
-    echo "Runs the following: " >&2
+    echo "Plots P(nc|E) for a range of different tempering levels" >&2
+    echo "used to confirm P(nc|E) is independent of T" >&2
      echo "Usage  : showAllConfigDist_sqW.sh [base folder][int energy value][int LowestTemp][int HighestTemp]" >&2
-   echo "Example: showAllConfigDist_sqW.sh outputFiles/N40_OpOut3/ 70 0 5  " >&2
+   echo "Example: showAllConfigDist_sqW.sh outputFiles/128T.446B16j1-1/ 100 0 15  " >&2
   exit 1
 fi
 

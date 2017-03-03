@@ -1,7 +1,7 @@
 #Check correct number of command line arguments
 if (( $# != 2 )); then
     echo "Compares P(nc|E) average of multiple runs, to check reproducibility." >&2
-    echo "Usage  :  batchConfigShow_sw.sh [.list file (as above)][Energy of Interest]" >&2
+    echo "Usage  :  batchConfigShow_sw.sh [.list file (as below)][Energy of Interest]" >&2
     echo "Example:  batchConfigShow_sw.sh  N5Test.list " >&2
     echo "" >&2
     echo "Requires a .list file of the form (same at batchOutput_sqW.sh):" >&2

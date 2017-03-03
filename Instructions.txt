@@ -1,9 +1,16 @@
+====Building====
+cd  ~/source/SqWellScripts
+./makeAll.sh icc <—compiler name (optional) defaults to gcc
+
 ====Setting up simulations====
 * sqWellCp.sh: Creates a copy of an input file with a new name and new output folders
 
 * setupRun.sh (main distro): Generates output folders and hpc submission scripts  
    	- checkOutputFolder.sh: Checks input file and output folder names are the same
 	- createDirs.sh (main distro): Creates required output folders 
+
+* createDirsConfig.sh (main distro -  only needed if configs are to be saved (set log configurations = 1 in input file): 
+	Generates nested subfolders to accept the output configurations
 
 * quickRestart
 
@@ -35,11 +42,23 @@ This code outputs the following files:
 
 ====Extracting data for new order parameters====
 
+____Nc output directly____
+
+* showAllConfigDist :   Plots P(nc|E) for a range of different tempering levels
+	This code outputs the following files (in the same folder as the nc data from the simulation):	
+		§ Norm_<EnergyVal>.dat : normalised data for each tempering level
+		§ Ave_<EnergyVal>.dat  : normalised data summed over each tempering level
+
+* ncAve : Produces nc distribution data:
+	 (Takes nc output data, normalises and produces average over all tempering levels)
+
+* batchConfigShow : Compares P(nc|E) average of multiple runs, to check reproducibility. Compares data summed over all tempering levels
+
+
+____Configurations saved to subfolders (NOT EXTENSIVELY TESTED)____
 * allConfigDist_sqW.sh :  Goes into each T and E config folder, computes nc from each config file and updates the histogram
        - confUpEn_sqW.sh:  Computes P(nc|E) for a specific E for temps LowestTemp....HighestTemp                                     - updateConfigDist_sqW: C code to compute nc (Steihardt-Nelson) and delete config file
 
 * showConfigDist_sqW.sh : Plots P(nc|E) for a range of different tempering levels
 
-====Building====
-cd  ~/source/SqWellScripts
-./makeAll.sh icc <—compiler name (optional) defaults to gcc
+

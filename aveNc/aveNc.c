@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
  
   //====Check number of arguments====
   if(argc != 4){
+    fprintf(stderr,"Produces nc distribution data:\n");
+    fprintf(stderr,"Takes nc output data, normalises and produces average over all tempering levels\n");
     fprintf(stderr,"Usage: aveNC_sqW [nc histogram file] [temps output file][overall average outputfile]\n");
     fprintf(stderr,"Examp: aveNC_sqW Hist_100.dat \n");
     exit(EXIT_FAILURE);
