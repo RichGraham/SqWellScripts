@@ -12,7 +12,7 @@ ln -sf ~/source/SqWellScripts/updateConfigDist/confUpEn_sqW.sh ~/bin
 ln -sf ~/source/SqWellScripts/updateConfigDist/allConfigDist_sqW.sh ~/bin
 ln -sf ~/source/SqWellScripts/updateConfigDist/showConfigDist_sqW.sh ~/bin
 ln -sf ~/source/SqWellScripts/aveNc/showAllConfigDist_sqW.sh ~/bin
-
+ln -sf ~/source/SqWellScripts/aveNc/batchConfigShow_sqW.sh  ~/bin
 #Check correct numnber of command line arguments
 if (( $# > 1 )); then
    echo "usage: makeAll.sh [c compiler choice: defaults to gcc if not specified]"
