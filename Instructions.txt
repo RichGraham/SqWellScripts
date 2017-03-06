@@ -44,6 +44,12 @@ This code outputs the following files:
 
 ____Nc output directly____
 
+* configAllE_sqW.sh : Computes P(nc|E) averaged over multiple runs for all energies and saves to folder
+This code outputs the following files:
+	§ listfile/Batch_**.dat (for one file for each energy
+
+* batchConfigShow : Compares P(nc|E) average of multiple runs, to check reproducibility. Compares data summed over all tempering levels
+
 * showAllConfigDist :   Plots P(nc|E) for a range of different tempering levels
 	This code outputs the following files (in the same folder as the nc data from the simulation):	
 		§ Norm_<EnergyVal>.dat : normalised data for each tempering level
@@ -52,7 +58,10 @@ ____Nc output directly____
 * ncAve : Produces nc distribution data:
 	 (Takes nc output data, normalises and produces average over all tempering levels)
 
-* batchConfigShow : Compares P(nc|E) average of multiple runs, to check reproducibility. Compares data summed over all tempering levels
+* multiAveNc_sqW : Produces nc distribution data averaged over several runs
+	(Computes P(nc|E) averaged over multiple runs for all energies and saves to folder)
+
+
 
 
 ____Configurations saved to subfolders (NOT EXTENSIVELY TESTED)____

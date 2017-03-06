@@ -1,6 +1,6 @@
 #Check correct number of command line arguments
 if (( $# != 1 )); then
-    echo "Computes P(nc|E) averaged over multiple runs and saves to folder" >&2
+    echo "Computes P(nc|E) averaged over multiple runs for all energies and saves to folder" >&2
     echo "Usage  :  configAllE_sqW.sh [.list file as below]" >&2
     echo "Example:  ******* " >&2
     echo "" >&2
