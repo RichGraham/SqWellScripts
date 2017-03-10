@@ -2,6 +2,7 @@
 if (( $# != 1 )); then
     echo "Computes P(nc|E) averaged over multiple runs for all energies and saves to folder" >&2
     echo "Usage  :  configAllE_sqW.sh [.list file as below]" >&2
+    echo "Output : listfile/Batch_**.dat (for all energies)"
     echo "Example:  ******* " >&2
     echo "" >&2
     echo "Requires a .list file of the form (same at batchOutput_sqW.sh):" >&2
