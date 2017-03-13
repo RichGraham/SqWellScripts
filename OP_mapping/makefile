@@ -1,7 +1,7 @@
 # simple make file
 # September 2004
 SOURCES=OP_mapping.c
-PRODUCT=$(HOME)/bin/OP_mapping
+PRODUCT=$(HOME)/bin/OP_mapping_sqW
 
 
 
