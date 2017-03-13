@@ -24,7 +24,7 @@ EnergyVal=$2
 arr1=( $( cut -d' ' -f1 $ListFile ) )
 #arr2=( $( cut -d' ' -f2 $1 ) )
 
-
+#====Average over individual files====
 cd outputFiles/
 for i in $(seq 1 $(expr ${#arr1[@]} - 1))
 do
@@ -43,8 +43,14 @@ do
     :
     allFolders="$allFolders outputFiles/${arr1[$i]}/configs/Hist_$EnergyVal.dat"
 done
-multiAveNc_sqW $allFolders dum.dat
+
+
+#====Make an output filename from arugments====
+OutputName=${ListFile%.*}_PncE_$EnergyVal.dat
+
+#====Run the averaging code====
+multiAveNc_sqW $allFolders $OutputName
 
 
 #echo $all
-xmgrace  -pexec "s0 line linewidth 8" -g 1200x900 dum.dat $all &
+xmgrace  -pexec "s0 line linewidth 8" -g 1200x900 $OutputName $all &

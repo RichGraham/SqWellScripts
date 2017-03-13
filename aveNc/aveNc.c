@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
   FILE *dataFile;
   char fileName[100];
-  char customer[100];
+  char customer[500];
   int nCol = 0, n=0;
   char *line;
   char *tempsOutFileName, *aveOutFileName;
@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
   }
   printf("File open %s\n",argv[1]);
   line = fgets(customer, sizeof(customer), dataFile);
+  //printf("%s\n",line);
   while(sscanf(line, "%10s%n", entry, &n ) == 1 ) {
     nCol++;
     line += n;

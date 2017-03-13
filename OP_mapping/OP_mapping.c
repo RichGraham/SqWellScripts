@@ -27,6 +27,7 @@ int main(int argc, char *argv[] )
   char nc_filename[100];
   char *landscapeIn_filename;
   char *folderIn_name;
+  char outFileName[200];
 
    struct stat st;
 
@@ -38,7 +39,7 @@ int main(int argc, char *argv[] )
   // check correct number of arguments
   if(argc !=6){
     printf("Usage: OP_mapping [int zero point][double T_in][landscape input filename][P(nc|E) input folder][double T_out]\n");
-    printf("Exmpl: OP_mapping 0 0.446 128T.446B16j1.list.dat 128T.446B16j1/ 0.40 > 128T_nc_T0.4.dat \n");
+    printf("Exmpl: OP_mapping 0 0.446 128T.446B16j1.list.dat.FE.stc 128T.446B16k0/ 0.446\n");
     exit(EXIT_FAILURE);
   }
 
@@ -82,7 +83,7 @@ int main(int argc, char *argv[] )
   ncMax = -100;
   while(eMax2 < -5){
     i++;
-    sprintf( nc_filename,"%sBatchAve_%d.dat",folderIn_name,i); 
+    sprintf( nc_filename,"%s/BatchAve_%d.dat",folderIn_name,i); 
     if( ( inFilePtr = fopen( nc_filename , "r") ) == NULL ){
       eMax2 = i-1;
       fprintf(stderr,"Read files 1...%d\n",eMax2);
@@ -117,11 +118,21 @@ int main(int argc, char *argv[] )
   
   
   
-  //_____Write FE data to std output___________  
-  for(nc=0; nc<=ncMax; nc++){
-    if( Pnc[nc] > 0 ){
-      printf("%d %e\n",nc, -log(Pnc[nc]/Pnc[zero_point])  );
+  //_____Write FE data to file___________
+
+  sprintf(outFileName,"%s%s%s.nc",argv[5],folderIn_name,landscapeIn_filename);
+  //fprintf(stderr,"Trying to openfile %s\n",outFileName);
+  if( ( outFilePtr = fopen( outFileName , "w") ) == NULL ){
+    fprintf(stderr,"Can't open output file\n");
+    exit(EXIT_FAILURE);
+  }else{
+    for(nc=0; nc<=ncMax; nc++){
+      if( Pnc[nc] > 0 ){
+	fprintf(outFilePtr,"%d %e\n",nc, -log(Pnc[nc]/Pnc[zero_point])  );
+      }
     }
+    fclose(outFilePtr);
+    fprintf(stderr,"Wrote to file %s\n",outFileName);
   }
 
 				 

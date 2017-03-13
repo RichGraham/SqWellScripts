@@ -37,7 +37,7 @@ fi
 
 
 echo ""
-for f in blockVary clipQuad collateClip dosMapping multiAverage updateConfigDist aveNc multiAveNc; do
+for f in blockVary clipQuad collateClip dosMapping multiAverage updateConfigDist aveNc multiAveNc OP_mapping; do
     echo $f
     cd $f
     make CC=$compiler

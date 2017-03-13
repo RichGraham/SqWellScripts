@@ -1,3 +1,8 @@
+#!/bin/bash
+
+set -e #Quit at first error
+
+
 #Check correct number of command line arguments
 if (( $# != 1 )); then
     echo "Computes P(nc|E) averaged over multiple runs for all energies and saves to folder" >&2
@@ -40,5 +45,10 @@ do
 	:
 	allFolders="$allFolders outputFiles/${arr1[$i]}/configs/Hist_$EnergyVal.dat"
     done
+    #echo $allFolders $outFolder/BatchAve_$EnergyVal.dat
+    #pwd
     multiAveNc_sqW $allFolders $outFolder/BatchAve_$EnergyVal.dat
+    if [ $(($EnergyVal%10)) = 0 ]; then
+	echo 'Done '$EnergyVal'/'$MaxEnergy
+    fi
 done

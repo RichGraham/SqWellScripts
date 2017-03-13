@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
   FILE *dataFile;
   char fileName[100];
-  char customer[100];
+  char customer[500];
   int nCol = 0, n=0;
   char *line;
   char *aveOutFileName, *inputFile;
@@ -40,11 +40,12 @@ int main(int argc, char *argv[])
   //******************Loop over input files *****************************
   for(inFileNumber = 1;  inFileNumber < argc-1 ; inFileNumber++){
     inputFile = argv[inFileNumber];
-    
-    
+
+    //printf("Attempting file %s\n",inputFile);
+  
     //====count the number of columns====
     if((dataFile = fopen(inputFile, "r")) == NULL) {
-      printf("Error Opening File: %s.\n", argv[1]);
+      printf("Multi.c: Error Opening File: %s\n", inputFile);
       exit(1);
     }
     nCol=0;
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
       nCol++;
       line += n;
     }
-    printf("%s has %d columns\n",inputFile,nCol);
+    //printf("%s has %d columns\n",inputFile,nCol);
     fclose(dataFile);
     
     
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
     //====Read in the data file====
     long int SN_Hist[MAX_TEMPS][MAX_NC]={0}; // SN_Hist[tempering level, energy level, SN order Param value]
     if((dataFile = fopen(inputFile, "r")) == NULL) {
-      printf("Error Opening File: %s.\n", inputFile);
+      printf("Multi.c: Error Opening File: %s\n", inputFile);
       exit(1);
     }
     while(!feof(dataFile)){
