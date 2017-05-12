@@ -4,6 +4,8 @@
 #include <string.h>
 
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define MAX_LENGTH 3000
+
 
 int main(int argc, char *argv[] )
 {
@@ -13,10 +15,10 @@ int main(int argc, char *argv[] )
   //====Original variables
   char  newWeightFileTEMP[400];
   int num_blocks;
-  int N=600;
+  int N;
   int i, j, n, lower, upper;
   int  dummyInt;
-  double bias[1000]={8000.0};
+  double bias[MAX_LENGTH]={8000.0};
   FILE *inputPtr, *weightPtr, *outPtr;
   double edgeBias;
   double upperBias, lowerBias;
@@ -52,7 +54,13 @@ int main(int argc, char *argv[] )
   kappa_upper = edgeBias/(upper-kMin)/(upper-kMin);
   kappa = MIN( kappa_upper, kappa_low);
 
-
+  //Choose maximum point to write based on upper
+  N = 1.5 * upper;
+  if( N > MAX_LENGTH){
+    printf("ERROR!!!:  Attempting to write beyond MAX_LENGTH. N=%d vs %d!!!!!!\n",N,MAX_LENGTH);
+    printf("Increase MAX_LENGTH in source code and recompile\n");
+    return 0;
+  }
   
   sprintf(newWeightFileTEMP,"%s",argv[1]);
 
