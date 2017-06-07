@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "../MaxArraySizes.h"
 
 int main(int argc, char *argv[] )
 {
@@ -190,23 +191,30 @@ int main(int argc, char *argv[] )
   printf("New weight file: %s\n",newWeightFile);
   printf("Number of Temps = %d\n",numTemps);
 
+  
+  if(numTemps >MAX_TEMPS){
+    printf("********ERROR!\n NUM_TEMPS=%d is too large (>MAX_TEMPS).\n Edit MaxArraySizes.h and recompile\n",numTemps);
+    exit(EXIT_FAILURE);
+  }
+
+  
   //return 0;
 
-  long unsigned int occupanciesTEMP[18][1000]={0};
-  long unsigned int occupancies[18][1000]={0};
-  long unsigned int maxVal[18]={0};
-  long unsigned int mode[18]={0};
-  long  int minEl[18]={0};
-  long  int maxEl[18]={0};
-  long  int totalOcc[18]={0};
-  long  int runningMean[18]={0};
+  long unsigned int occupanciesTEMP[MAX_TEMPS][MAX_NSQ]={0};
+  long unsigned int occupancies[MAX_TEMPS][MAX_NSQ]={0};
+  long unsigned int maxVal[MAX_TEMPS]={0};
+  long unsigned int mode[MAX_TEMPS]={0};
+  long  int minEl[MAX_TEMPS]={0};
+  long  int maxEl[MAX_TEMPS]={0};
+  long  int totalOcc[MAX_TEMPS]={0};
+  long  int runningMean[MAX_TEMPS]={0};
 
   char occOutputFile[400];
   
   FILE  *weightPtr;
-  FILE  *rangePtr[18];
+  FILE  *rangePtr[MAX_TEMPS];
   char blockFile[400];
-  double bias[1000];
+  double bias[MAX_NSQ];
 
 
   //printf("Nmax=%d\n",N);
@@ -233,7 +241,7 @@ int main(int argc, char *argv[] )
       printf("Reading from file: %s\n", blockFile);
 
     
-    for(i = 0  ;   i <  18  ;   i++){
+    for(i = 0  ;   i <  MAX_TEMPS  ;   i++){
       //maxVal[i]=0;
       //mode[i]=0;
       minEl[i]=300000;
@@ -276,8 +284,8 @@ int main(int argc, char *argv[] )
   /*
 
   long unsigned int totalSteps=0;
-  double relOccupancies[18][1000];
-  double FE[18][1000];
+  double relOccupancies[MAX_TEMPS][MAX_NSQ];
+  double FE[MAX_TEMPS][MAX_NSQ000];
 
   for(i=0;i<N;i++)
     totalSteps += occupancies[0][i];
