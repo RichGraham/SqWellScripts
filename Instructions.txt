@@ -14,6 +14,10 @@ cd  ~/source/SqWellScripts
 
 * quickRestart
 
+* loopSub.sh: Starts an hpc run that resubmits itself
+	-restartSub_sqW.sh: 
+
+
 * clipQuad: Attempts to create a biasing function that's localised around the density of states'bottle-neck
 
 ==== Analysing results ====
