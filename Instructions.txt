@@ -15,6 +15,8 @@ cd  ~/source/SqWellScripts
 * quickRestart
 
 * loopSub.sh: Starts an hpc run that resubmits itself (E.G. loopSub_sqW.sh -n N10Test1-1  -n flag specifies a new run)
+  IMPORTANT: If given the -n flag then given filename will be the started run
+             If no -n flag then the given filename will be used to spawn a newly named run  
 	-restartSub_sqW.sh: sets up a restart run given old and new filenames
 
 

@@ -33,10 +33,17 @@ newJobName=$masterJobName-$newJobNumber
 echo 'Old run: '$jobName
 echo 'New run: '$newJobName
 
+#Check that the job number is not crazily large
+#Needs adding!!!!
+
 
 if [ "$nflag" == "true" ]; then
     newJobName=$jobName
     #Check the input file exisits
+    if [ ! -f $newJobName ]; then
+	echo "File not found!"
+	exit 1
+    fi
     
     #Read the number of temperatures from the new input file
     nProcs=$(cat inputFiles/$newJobName.dat | grep NUM_TEMPS | cut -d ':' -f 1)
