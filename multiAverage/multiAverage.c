@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "../MaxArraySizes.h"
 
-#define OCC_TOL 0.0003
+#define OCC_TOL 0.0000
 //#define OCC_TOL 0.0000
 
 int main(int argc, char *argv[] )
@@ -54,7 +55,7 @@ int main(int argc, char *argv[] )
   int fileNumber;
   int NBeads;
 
-  int stitchPoint[18]={0};
+  int stitchPoint[MAX_TEMPS]={0};
 
   
   char sdir[400];
@@ -65,9 +66,9 @@ int main(int argc, char *argv[] )
 
   char inputFileName[400];
 
-  double tempLevel[18]={0.0};
+  double tempLevel[MAX_TEMPS]={0.0};
 
-  int findMatchPoint( int temp, long unsigned occupancies[18][1000], int nTemps);
+  int findMatchPoint( int temp, long unsigned occupancies[MAX_TEMPS][MAX_NSQ], int nTemps);
 
   
   
@@ -78,13 +79,13 @@ int main(int argc, char *argv[] )
   int i, j, n;
   int startPoint;
 
-  long unsigned int occupanciesTEMP[18][1000]={0};
-  long unsigned int occupancies[18][1000]={0};
-  double lnDOS[18][1000]={0.0};
+  long unsigned int occupanciesTEMP[MAX_TEMPS][MAX_NSQ]={0};
+  long unsigned int occupancies[MAX_TEMPS][MAX_NSQ]={0};
+  double lnDOS[MAX_TEMPS][MAX_NSQ]={0.0};
 
     FILE  *weightPtr;
     char blockFile[400];
-    double bias[1000];
+    double bias[MAX_NSQ];
 
 
   //====Check correct at least 4 args and that arg number is even ================
@@ -113,6 +114,13 @@ int main(int argc, char *argv[] )
 
   printf("matchpoint=%d, Nmax=%d\n",matchPoint, N);
   //return 0;
+
+
+  
+    if(N > MAX_NSQ){
+      printf("********ERROR!\n NMAX=%d is too large (> MAX_NSQ).\n Edit MaxArraySizes.h and recompile\n",N);
+      exit(EXIT_FAILURE);
+    }
 
   
 
@@ -210,6 +218,13 @@ int main(int argc, char *argv[] )
     fscanf(inputPtr, "%s\n",initCoords);
     fgets(buffer, 100, inputPtr);
     fclose(inputPtr);
+
+    
+    if(numTemps >MAX_TEMPS){
+      printf("********ERROR!\n NUM_TEMPS=%d is too large (>MAX_TEMPS).\n Edit MaxArraySizes.h and recompile\n",numTemps);
+      exit(EXIT_FAILURE);
+    }
+
     
 
     //check that the weightFiles are all the same
@@ -299,8 +314,8 @@ int main(int argc, char *argv[] )
   
 
   long unsigned int totalSteps=0;
-  double relOccupancies[18][1000];
-  double FE[18][1000];
+  double relOccupancies[MAX_TEMPS][MAX_NSQ];
+  double FE[MAX_TEMPS][MAX_NSQ];
   double basePoint;
   int  dummyInt;
 
@@ -497,7 +512,7 @@ int main(int argc, char *argv[] )
   return 0;
 }
 
-int findMatchPoint( int temp, long unsigned int occupancies[18][1000], int nPoints)
+int findMatchPoint( int temp, long unsigned int occupancies[MAX_TEMPS][MAX_NSQ], int nPoints)
 {
   int currentMatch=0;
   long int currentMaxiMin=0;

@@ -1,19 +1,14 @@
 # simple make file
-# September 2004
 SOURCES=collateClip.c
-OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
 PRODUCT=$(HOME)/bin/collateClip_sqW
 
+OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
 DEPS := $(OBJECTS:.o=.d)
 
-
-
-CFLAGS=-O2 -I$(NR)/include
+CFLAGS=-O2 
 LDFLAGS=-lm
 
 all: $(PRODUCT)
-
-
 
 rebuild: clean all
 
