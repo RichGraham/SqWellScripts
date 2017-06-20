@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e #Quit if we get an error
 
 #Check correct number of command line arguments
 if (( $# < 4 )); then
@@ -21,6 +22,6 @@ aveStart=$4
 
 
 
-collateClip $matchPoint $MaxEnergy $inputFile $aveStart
+collateClip_sqW $matchPoint $MaxEnergy $inputFile $aveStart
 blockVary $inputFile 10000 $aveStart
 showAll.sh $inputFile

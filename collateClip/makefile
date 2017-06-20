@@ -1,15 +1,27 @@
 # simple make file
 # September 2004
-SOURCES=collateClip.c 
-PRODUCT=$(HOME)/bin/collateClip
+SOURCES=collateClip.c
+OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
+PRODUCT=$(HOME)/bin/collateClip_sqW
+
+DEPS := $(OBJECTS:.o=.d)
 
 
 
-
-CFLAGS=-lm -O2 -I$(NR)/include
-
+CFLAGS=-O2 -I$(NR)/include
+LDFLAGS=-lm
 
 all: $(PRODUCT)
 
-$(PRODUCT) : $(SOURCES)
-	$(CC) $(CFLAGS) -o $(PRODUCT) $(SOURCES)
+
+
+rebuild: clean all
+
+$(PRODUCT): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+%.o: %.c
+	$(CC) -c -MMD -MP $< -o $@ $(CFLAGS)
+
+# Let make read the dependency files and handle them.
+-include $(DEPS)
