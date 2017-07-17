@@ -21,6 +21,7 @@ int main(int argc, char *argv[] )
   double bias[MAX_LENGTH]={8000.0};
   FILE *inputPtr, *weightPtr, *outPtr;
   double edgeBias;
+  double dum;
   double upperBias, lowerBias;
   double kappa, kappa_low, kappa_upper;
   int kMin;
@@ -77,7 +78,8 @@ int main(int argc, char *argv[] )
     printf("Cannot open weight file: %s\n", argv[1]);
   else{
     for(i=0;i<N;i++){
-      fscanf(weightPtr,"%d %lf",&dummyInt, &bias[i]);
+      fscanf(weightPtr,"%d %lf",&dummyInt, &dum);
+      bias[dummyInt]=dum;
       
     }
   }
@@ -90,9 +92,9 @@ int main(int argc, char *argv[] )
   else{
     outPtr = fopen( newWeightFileTEMP, "w");
     for(i=0;i<N;i++){
-      fscanf(weightPtr,"%d %lf",&dummyInt, &bias[i]);
-      if( dummyInt > upper) bias[i]=bias[upper];
-      if( dummyInt < lower) bias[i]=bias[lower];
+      //fscanf(weightPtr,"%d %lf",&dummyInt, &bias[dummyInt]);
+      if( i > upper) bias[i]=bias[upper];
+      if( i < lower) bias[i]=bias[lower];
       //printf("%d %f\n",i,bias[i]-kappa*(i-kMin)*(i-kMin));
       fprintf(outPtr,"%d %f\n",i,bias[i]-kappa*(i-kMin)*(i-kMin));
     }
