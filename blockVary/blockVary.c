@@ -156,7 +156,7 @@ int main(int argc, char *argv[] )
   //printf("Enter the source directory: ");
   sprintf(sdirTEMP,"%s" ,outputDir);
 
-  N=500;
+  //N=5000;
 
 
 
@@ -186,7 +186,7 @@ int main(int argc, char *argv[] )
   printf("Source directory: %s\n", sdir);
   printf("Working directory: %s\n", wdir);
   printf("Number of blocks: %d\n", num_blocks);
-  printf("Max no. of states: %d\n",N);
+  printf("Max no. of states: %d\n",MAX_NSQ);
   printf("Weight File for correction: %s\n",weightFile);
   printf("New weight file: %s\n",newWeightFile);
   printf("Number of Temps = %d\n",numTemps);
@@ -253,7 +253,7 @@ int main(int argc, char *argv[] )
 
     
     i=0;
-    for(i=0;i<N;i++){
+    for(i=0;i<MAX_NSQ;i++){
       for(j=0;j<numTemps;j++){
 	fscanf(inputPtr,"%ld",&occupanciesTEMP[j][i]);
 	
