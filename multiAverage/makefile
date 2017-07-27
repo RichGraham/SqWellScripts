@@ -4,14 +4,21 @@ SOURCES=multiAverage.c
 PRODUCT=$(HOME)/bin/multiAverage_sqW
 
 
+OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
+DEPS := $(OBJECTS:.o=.d)
 
-
-CFLAGS=-lm -O2 -I$(NR)/include
-
-
-
+CFLAGS=-O2 
+LDFLAGS=-lm
 
 all: $(PRODUCT)
 
-$(PRODUCT) : $(SOURCES)
-	$(CC) $(CFLAGS) -o $(PRODUCT) $(SOURCES)
+rebuild: clean all
+
+$(PRODUCT): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+%.o: %.c
+	$(CC) -c -MMD -MP $< -o $@ $(CFLAGS)
+
+# Let make read the dependency files and handle them.
+-include $(DEPS)
