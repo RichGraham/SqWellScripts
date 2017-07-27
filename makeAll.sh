@@ -6,8 +6,14 @@ cp sqWellCp.sh ~/bin/
 cp batchOutput/batchOutput.sh ~/bin/
 cp checkOutputFolder.sh ~/bin
 cp quickRestart/quickRestart.sh ~/bin
-cp batchAverage/batchAverage_sqW.sh ~/bin
-
+ln -sf ~/source/SqWellScripts/batchAverage/batchAverage_sqW.sh ~/bin
+ln -sf ~/source/SqWellScripts/updateConfigDist/resetNames_sqW.sh ~/bin
+ln -sf ~/source/SqWellScripts/updateConfigDist/confUpEn_sqW.sh ~/bin
+ln -sf ~/source/SqWellScripts/updateConfigDist/allConfigDist_sqW.sh ~/bin
+ln -sf ~/source/SqWellScripts/updateConfigDist/showConfigDist_sqW.sh ~/bin
+ln -sf ~/source/SqWellScripts/aveNc/showAllConfigDist_sqW.sh ~/bin
+ln -sf ~/source/SqWellScripts/aveNc/batchConfigShow_sqW.sh  ~/bin
+ln -sf ~/source/SqWellScripts/aveNc/configAllE_sqW.sh  ~/bin
 
 #Check correct numnber of command line arguments
 if (( $# > 1 )); then
@@ -31,7 +37,7 @@ fi
 
 
 echo ""
-for f in blockVary clipQuad collateClip dosMapping multiAverage; do
+for f in blockVary clipQuad collateClip dosMapping multiAverage updateConfigDist aveNc multiAveNc OP_mapping; do
     echo $f
     cd $f
     make CC=$compiler

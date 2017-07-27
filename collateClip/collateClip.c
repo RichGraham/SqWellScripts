@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "../MaxArraySizes.h"
 
 int main(int argc, char *argv[] )
 {
@@ -46,6 +47,8 @@ int main(int argc, char *argv[] )
     int update;
   double tolerance;
 
+  double tempLevel[MAX_TEMPS]={0.0};
+  
   
   //====Original variables
   char sdirTEMP[400], ddirTEMP[400], weightFileTEMP[400], weightFile[400], newWeightFileTEMP[400];
@@ -143,7 +146,14 @@ int main(int argc, char *argv[] )
   fscanf(inputPtr, "%s\n",initCoords);
   fgets(buffer, 100, inputPtr);
   fclose(inputPtr);
+
+
   
+  if(numTemps >MAX_TEMPS){
+    printf("********ERROR!\n NUM_TEMPS=%d is too large (>MAX_TEMPS).\n Edit MaxArraySizes.h and recompile\n",numTemps);
+    exit(EXIT_FAILURE);
+  }
+
   //printf("Nmin/max %d %d\n",Nmin, Nmax);
 
   //N= Nmax;
@@ -203,12 +213,12 @@ int main(int argc, char *argv[] )
 
   //return 0;
 
-  long unsigned int occupanciesTEMP[18][1000]={0};
-  long unsigned int occupancies[18][1000]={0};
+  long unsigned int occupanciesTEMP[MAX_TEMPS][MAX_NSQ]={0};
+  long unsigned int occupancies[MAX_TEMPS][MAX_NSQ]={0};
 
   FILE  *weightPtr;
   char blockFile[400];
-  double bias[1000];
+  double bias[MAX_NSQ];
 
 
   //printf("Nmax=%d\n",N);
@@ -242,8 +252,8 @@ int main(int argc, char *argv[] )
   
 
   long unsigned int totalSteps=0;
-  double relOccupancies[18][1000];
-  double FE[18][1000];
+  double relOccupancies[MAX_TEMPS][MAX_NSQ];
+  double FE[MAX_TEMPS][MAX_NSQ];
   double basePoint;
 
   for(i=0;i<N;i++)
@@ -269,7 +279,18 @@ int main(int argc, char *argv[] )
   //printf("Weight file read\n");
   //printf("Nmax=%d\n",N);
 
-
+  //=====Read in temperatures file===============
+  if((weightPtr=fopen(tempsFile,"r"))==NULL)
+    printf("Cannot open temps file: %s\n",tempsFile);
+  else{
+    for(i=0;i<numTemps;i++)   fscanf(weightPtr,"%lf",&tempLevel[i]);
+    //printf("%d %f\n",i, tempLevel[i]);}
+  }
+  fclose(weightPtr);
+  printf("Temps file read\n");
+  
+  //printf("Nmax=%d\n",N);
+  
 
   //===Compute the unshifted free energy========
   for(i=0;i<N;i++){
@@ -277,7 +298,7 @@ int main(int argc, char *argv[] )
     for(j=0;  j<numTemps ;   j++){
       relOccupancies[j][i] = 1.0*occupancies[j][i]/(1.0*totalSteps);      
       if(relOccupancies[j][i]>0.0)
-	FE[j][i] = -log(relOccupancies[j][i]/(exp(bias[i])));
+	FE[j][i] = -log(relOccupancies[j][i]/(exp(tempLevel[TEMP_INTEREST]/tempLevel[j]*bias[i])));
 	//FE[j][i] = -log(relOccupancies[j][i]);
       else
 	FE[j][i] = FE[j][i-1];

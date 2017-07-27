@@ -4,6 +4,8 @@
 #include <string.h>
 
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define MAX_LENGTH 3000
+
 
 int main(int argc, char *argv[] )
 {
@@ -13,12 +15,13 @@ int main(int argc, char *argv[] )
   //====Original variables
   char  newWeightFileTEMP[400];
   int num_blocks;
-  int N=600;
+  int N;
   int i, j, n, lower, upper;
   int  dummyInt;
-  double bias[1000]={8000.0};
+  double bias[MAX_LENGTH]={8000.0};
   FILE *inputPtr, *weightPtr, *outPtr;
   double edgeBias;
+  double dum;
   double upperBias, lowerBias;
   double kappa, kappa_low, kappa_upper;
   int kMin;
@@ -26,7 +29,11 @@ int main(int argc, char *argv[] )
 
   //====Check correct number of args and that input file exisits================
   if(argc != 6){
-    printf("Usage: clipQuad [weight filename][int lower limit ][int higher limit][int quadratic minimum][float edge biasing value]\n");
+    printf("Attempts to create a biasing function that's localised around the density of states'bottle-neck'\n");
+    printf("Takes an estimate of the free energy landscape and subtracts a quadratic with centre and strength specified below\n");
+    printf("Also flattens the biasing function at upper and lower limit to avoid exploring extreme edges.\n");
+    printf("Usage: clipQuad [weight filename][int lower limit ][int upper limit][int quadratic minimum][float edge biasing value]\n");
+    printf("Example: clipQuad N40Test.list.dat 0 110 75 2\n");
     exit(EXIT_FAILURE);
   }
 
@@ -48,7 +55,13 @@ int main(int argc, char *argv[] )
   kappa_upper = edgeBias/(upper-kMin)/(upper-kMin);
   kappa = MIN( kappa_upper, kappa_low);
 
-
+  //Choose maximum point to write based on upper
+  N = 1.5 * upper;
+  if( N > MAX_LENGTH){
+    printf("ERROR!!!:  Attempting to write beyond MAX_LENGTH. N=%d vs %d!!!!!!\n",N,MAX_LENGTH);
+    printf("Increase MAX_LENGTH in source code and recompile\n");
+    return 0;
+  }
   
   sprintf(newWeightFileTEMP,"%s",argv[1]);
 
@@ -65,7 +78,8 @@ int main(int argc, char *argv[] )
     printf("Cannot open weight file: %s\n", argv[1]);
   else{
     for(i=0;i<N;i++){
-      fscanf(weightPtr,"%d %lf",&dummyInt, &bias[i]);
+      fscanf(weightPtr,"%d %lf",&dummyInt, &dum);
+      bias[dummyInt]=dum;
       
     }
   }
@@ -78,9 +92,9 @@ int main(int argc, char *argv[] )
   else{
     outPtr = fopen( newWeightFileTEMP, "w");
     for(i=0;i<N;i++){
-      fscanf(weightPtr,"%d %lf",&dummyInt, &bias[i]);
-      if( dummyInt > upper) bias[i]=bias[upper];
-      if( dummyInt < lower) bias[i]=bias[lower];
+      //fscanf(weightPtr,"%d %lf",&dummyInt, &bias[dummyInt]);
+      if( i > upper) bias[i]=bias[upper];
+      if( i < lower) bias[i]=bias[lower];
       //printf("%d %f\n",i,bias[i]-kappa*(i-kMin)*(i-kMin));
       fprintf(outPtr,"%d %f\n",i,bias[i]-kappa*(i-kMin)*(i-kMin));
     }
