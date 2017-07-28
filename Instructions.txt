@@ -1,5 +1,4 @@
 ====Building====
-cd  ~/source/SqWellScripts
 ./makeAll.sh icc <—compiler name (optional) defaults to gcc
 
 ====Setting up simulations====

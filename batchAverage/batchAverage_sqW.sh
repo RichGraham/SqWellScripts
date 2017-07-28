@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e #Quit if we get an error
+
 #Check correct number of command line arguments
 if (( $# < 1 )); then
     echo "Averages over the output of multiple runs, to improve accuracy." >&2

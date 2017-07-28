@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include "../MaxArraySizes.h"
 
 int main(int argc, char *argv[] )
 {
@@ -46,7 +47,7 @@ int main(int argc, char *argv[] )
     int update;
   double tolerance;
 
-  double tempLevel[18]={0.0};
+  double tempLevel[MAX_TEMPS]={0.0};
   
   
   //====Original variables
@@ -145,7 +146,14 @@ int main(int argc, char *argv[] )
   fscanf(inputPtr, "%s\n",initCoords);
   fgets(buffer, 100, inputPtr);
   fclose(inputPtr);
+
+
   
+  if(numTemps >MAX_TEMPS){
+    printf("********ERROR!\n NUM_TEMPS=%d is too large (>MAX_TEMPS).\n Edit MaxArraySizes.h and recompile\n",numTemps);
+    exit(EXIT_FAILURE);
+  }
+
   //printf("Nmin/max %d %d\n",Nmin, Nmax);
 
   //N= Nmax;
@@ -205,12 +213,12 @@ int main(int argc, char *argv[] )
 
   //return 0;
 
-  long unsigned int occupanciesTEMP[18][1000]={0};
-  long unsigned int occupancies[18][1000]={0};
+  long unsigned int occupanciesTEMP[MAX_TEMPS][MAX_NSQ]={0};
+  long unsigned int occupancies[MAX_TEMPS][MAX_NSQ]={0};
 
   FILE  *weightPtr;
   char blockFile[400];
-  double bias[1000];
+  double bias[MAX_NSQ];
 
 
   //printf("Nmax=%d\n",N);
@@ -244,8 +252,8 @@ int main(int argc, char *argv[] )
   
 
   long unsigned int totalSteps=0;
-  double relOccupancies[18][1000];
-  double FE[18][1000];
+  double relOccupancies[MAX_TEMPS][MAX_NSQ];
+  double FE[MAX_TEMPS][MAX_NSQ];
   double basePoint;
 
   for(i=0;i<N;i++)
