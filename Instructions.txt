@@ -14,12 +14,12 @@
 * quickRestart
 
 * loopSub.sh: Starts an hpc run that resubmits itself (E.G. loopSub_sqW.sh -n N10Test1-1  -n flag specifies a new run)
-  IMPORTANT: If given the -n flag then given filename will be the started run
+  IMPORTANT: If given the -n flag then given filename will be the started run (no new files created)
              If no -n flag then the given filename will be used to spawn a newly named run  
 	-restartSub_sqW.sh: sets up a restart run given old and new filenames
 
 
-* clipQuad: Attempts to create a biasing function that's localised around the density of states'bottle-neck
+* clipQuad: Attempts to create a biasing function that's localised around the density of states' bottle-neck
 
 ==== Analysing results ====
 
