@@ -15,8 +15,8 @@ ln -sf ~/source/SqWellScripts/aveNc/showAllConfigDist_sqW.sh ~/bin
 ln -sf ~/source/SqWellScripts/aveNc/batchConfigShow_sqW.sh  ~/bin
 ln -sf ~/source/SqWellScripts/aveNc/configAllE_sqW.sh  ~/bin
 ln -sf ~/source/SqWellScripts/loopSub/loopSub_sqW.sh  ~/bin
-ln -sf ~/source/SqWellScripts/loopSub/restartSub_sqW.sh  ~/bin
-
+#ln -sf ~/source/SqWellScripts/loopSub/restartSub_sqW.sh  ~/bin
+ln -sf ~/source/SqWellScripts/loopSub/setupRestartRun_sqW.sh ~/bin
 #Check correct numnber of command line arguments
 if (( $# > 1 )); then
    echo "usage: makeAll.sh [c compiler choice: defaults to gcc if not specified]"
