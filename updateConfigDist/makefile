@@ -5,10 +5,31 @@ PRODUCT=$(HOME)/bin/updateConfigDist_sqW
 
 
 
+NR=$(HOME)/recipes_c-ansi
 
-CFLAGS=-lm -O2 
+VPATH = ./ : $(NR)/misc/ :  $(NR)/recipes/ 
+
+OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
+DEPS := $(OBJECTS:.o=.d)
+
+CFLAGS=-O2 
+LDFLAGS=-lm
 
 all: $(PRODUCT)
 
-$(PRODUCT) : $(SOURCES)
-	$(CC) $(CFLAGS) -o $(PRODUCT) $(SOURCES)
+rebuild: clean all
+
+$(PRODUCT): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+%.o: %.c
+	$(CC) -c -MMD -MP $(CFLAGS) -I$(NR)/include $< -o $@ 
+
+# Let make read the dependency files and handle them.
+-include $(DEPS)
+
+.c.o:	
+	$(CC)  $(CFLAGS)-c $< 
+
+clean:
+	rm -f *.o

@@ -20,3 +20,4 @@ $(PRODUCT): $(OBJECTS)
 
 # Let make read the dependency files and handle them.
 -include $(DEPS)
+
