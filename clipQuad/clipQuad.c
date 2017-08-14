@@ -23,37 +23,34 @@ int main(int argc, char *argv[] )
   double edgeBias;
   double dum;
   double upperBias, lowerBias;
-  double kappa, kappa_low, kappa_upper;
-  int kMin;
+  double kappa, kappa_low, kappa_upper, kappa_NMax;
+  int kMin, NMax;
 
 
   //====Check correct number of args and that input file exisits================
-  if(argc != 6){
+  if(argc != 8){
     printf("Attempts to create a biasing function that's localised around the density of states'bottle-neck'\n");
     printf("Takes an estimate of the free energy landscape and subtracts a quadratic with centre and strength specified below\n");
     printf("Also flattens the biasing function at upper and lower limit to avoid exploring extreme edges.\n");
-    printf("Usage: clipQuad [weight filename][int lower limit ][int upper limit][int quadratic minimum][float edge biasing value]\n");
+    printf("Usage: clipQuad [weight filename][Nmax][kappa NMax][int lower clip limit ][int upper clip limit][int quadratic minimum][kappa]\n");
     printf("Example: clipQuad N40Test.list.dat 0 110 75 2\n");
     exit(EXIT_FAILURE);
   }
 
-  lower = atoi( argv[2]);
-  upper = atoi( argv[3]);
-  kMin = atoi( argv[4]);
-  edgeBias = atof ( argv[5]);
+  NMax = atoi( argv[2]);
+  kappa_NMax = atof ( argv[3]);
+  lower = atoi( argv[4]);
+  upper = atoi( argv[5]);
+  kMin = atoi( argv[6]);
+  kappa = atof ( argv[7]);
 
-
+  printf("NMax %d, kappa NMax %f\n",NMax, kappa_NMax);
   printf("lower %d, upper %d, kMin %d, edge %f\n",lower, upper, kMin, edgeBias);
 
   if( lower > upper || lower>kMin || kMin> upper){
     printf("ERROR!!!:  Check ordering of lower, upper and middle!!!!!!\n");
     return 0;
   }
-
-  //compute kappa based on desired biasing at edge of region
-  kappa_low = edgeBias/(lower-kMin)/(lower-kMin);
-  kappa_upper = edgeBias/(upper-kMin)/(upper-kMin);
-  kappa = MIN( kappa_upper, kappa_low);
 
   //Choose maximum point to write based on upper
   N = 1.5 * upper;
@@ -96,7 +93,10 @@ int main(int argc, char *argv[] )
       if( i > upper) bias[i]=bias[upper];
       if( i < lower) bias[i]=bias[lower];
       //printf("%d %f\n",i,bias[i]-kappa*(i-kMin)*(i-kMin));
-      fprintf(outPtr,"%d %f\n",i,bias[i]-kappa*(i-kMin)*(i-kMin));
+      if(i>NMax)
+	fprintf(outPtr,"%d %f\n",i,bias[i]-kappa*(i-kMin)*(i-kMin)-kappa_NMax*(i-NMax)*(i-NMax)  );
+	else
+	  fprintf(outPtr,"%d %f\n",i,bias[i]-kappa*(i-kMin)*(i-kMin));
     }
   }
   fclose(weightPtr);

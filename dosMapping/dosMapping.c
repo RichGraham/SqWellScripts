@@ -6,15 +6,15 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define NLARGE 500
+#include "../MaxArraySizes.h"
 
 
 int main(int argc, char *argv[] )
 {
   double Tin, Tout;
-  double lnDOS[NLARGE+1]={0.0};
+  double lnDOS[MAX_NSQ+1]={0.0};
 
-  double FEout[NLARGE+1]={0.0};
+  double FEout[MAX_NSQ+1]={0.0};
   int currentFilePoints;
   int dum,i;
   int zero_point;
