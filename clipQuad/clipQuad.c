@@ -66,7 +66,7 @@ int main(int argc, char *argv[] )
   memcpy(newWeightFileTEMP, argv[1], strlen(argv[1]) - 4);
   newWeightFileTEMP[strlen(argv[1]) - 4] = '\0';
 
-  sprintf(newWeightFileTEMP,"%sc%dk%.2e.dat",newWeightFileTEMP,kMin,kappa);
+  sprintf(newWeightFileTEMP,"%sNM%dK%.1ec%dk%.1e.dat",newWeightFileTEMP,NMax, kappa_NMax,kMin,kappa);
   
   printf("%s %s\n",argv[1],newWeightFileTEMP);
 
