@@ -7,15 +7,16 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+#include "../MaxArraySizes.h"
 
-#define NLARGE 500
+#define NLARGE 2500
 
 
 int main(int argc, char *argv[] )
 {
   double Tin, Tout;
   double lnDOS[NLARGE+1]={0.0};
-  double PncE[NLARGE+1][NLARGE+1]={0.0};
+  static double PncE[NLARGE+1][NLARGE+1]={0.0};
   double Pnc[NLARGE+1]={0.0};
 
   double FEout[NLARGE+1]={0.0};
@@ -121,7 +122,7 @@ int main(int argc, char *argv[] )
   //_____Write FE data to file___________
 
   sprintf(outFileName,"%s%s%s.nc",argv[5],folderIn_name,landscapeIn_filename);
-  //fprintf(stderr,"Trying to openfile %s\n",outFileName);
+  fprintf(stderr,"Trying to openfile %s\n",outFileName);
   if( ( outFilePtr = fopen( outFileName , "w") ) == NULL ){
     fprintf(stderr,"Can't open output file\n");
     exit(EXIT_FAILURE);

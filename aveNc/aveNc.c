@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_TEMPS 20
-#define MAX_NC 500
+#include "../MaxArraySizes.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,12 +12,12 @@ int main(int argc, char *argv[])
   int nCol = 0, n=0;
   char *line;
   char *tempsOutFileName, *aveOutFileName;
-  char entry[11];
+  char entry[200];
   int tempNum=0, nc=0, ncCount=0;
 
 
-  long int SN_Hist[MAX_TEMPS][MAX_NC]={0}; // SN_Hist[tempering level, energy level, SN order Param value]
-  long int SN_OverTemps[MAX_NC]={0};// Sum of SN occupancies for all Temps at fixed NC
+  long int SN_Hist[MAX_TEMPS][MAX_LENGTH]={0}; // SN_Hist[tempering level, energy level, SN order Param value]
+  long int SN_OverTemps[MAX_LENGTH]={0};// Sum of SN occupancies for all Temps at fixed NC
   long int TempNormConst[MAX_TEMPS]={0};// Sum over SN occupancues at fixed Temp for all NC (normalisation const)
   long int totalNorm=0;
  
@@ -58,7 +57,9 @@ int main(int argc, char *argv[])
   }
   while(!feof(dataFile)){
     fscanf(dataFile,"%d",&nc);
-    for(tempNum=1; tempNum<nCol ; tempNum++) fscanf(dataFile,"%ld", &SN_Hist[tempNum-1][nc]);
+    for(tempNum=1; tempNum<nCol ; tempNum++){ fscanf(dataFile,"%ld", &SN_Hist[tempNum-1][nc]);
+      //printf("%d %d %ld \n",nc,tempNum, SN_Hist[tempNum-1][nc]);
+    }
   }
   ncCount = nc;
   fclose(dataFile);

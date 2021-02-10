@@ -5,8 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_TEMPS 20
-#define MAX_NC 500
+#include "../MaxArraySizes.h"
 
 int main(int argc, char *argv[])
 {
@@ -19,7 +18,7 @@ int main(int argc, char *argv[])
   char entry[11];
   int tempNum=0, nc=0, ncCount=0;
   int inFileNumber;
-  long int SN_OverTemps[MAX_NC]={0};// Sum of SN occupancies for all Temps at fixed NC
+  long int SN_OverTemps[MAX_LENGTH]={0};// Sum of SN occupancies for all Temps at fixed NC
 
 
 
@@ -61,7 +60,7 @@ int main(int argc, char *argv[])
     
     
     //====Read in the data file====
-    long int SN_Hist[MAX_TEMPS][MAX_NC]={0}; // SN_Hist[tempering level, energy level, SN order Param value]
+    long int SN_Hist[MAX_TEMPS][MAX_LENGTH]={0}; // SN_Hist[tempering level, energy level, SN order Param value]
     if((dataFile = fopen(inputFile, "r")) == NULL) {
       printf("Multi.c: Error Opening File: %s\n", inputFile);
       exit(1);
@@ -87,11 +86,11 @@ int main(int argc, char *argv[])
 
   
   //====Compute the normalisation constant====
-  for(nc=0;   nc < MAX_NC ; nc++) totalNorm += SN_OverTemps[nc];
+  for(nc=0;   nc < MAX_LENGTH ; nc++) totalNorm += SN_OverTemps[nc];
 
   //====Write the data====
   dataFile = fopen(aveOutFileName, "w");
-  for(nc=0; nc<MAX_NC ; nc++){
+  for(nc=0; nc<MAX_LENGTH ; nc++){
     if(totalNorm != 0 && SN_OverTemps[nc] != 0 )
       fprintf(dataFile,"%d %e\n",nc,SN_OverTemps[nc]/(1.0*totalNorm));
   }
